@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم LUMI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="logo.jpg">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
+  :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#c0c0c0;--danger:#e63946;--success:#22c55e}
+  body{background:var(--bg);color:var(--text);min-height:100vh}
+  .container{max-width:960px;margin:auto;padding:24px}
+  h1{color:var(--accent);font-size:24px;margin-bottom:4px}
+  .subtitle{color:var(--muted);font-size:13px;margin-bottom:20px}
+
+  .login-card{background:var(--card);padding:32px;border-radius:14px;border:1px solid #222;max-width:400px;margin:80px auto;text-align:center}
+  .login-card img{height:60px;margin-bottom:20px;border-radius:6px}
+  .login-card input{width:100%;padding:13px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:var(--text);margin-bottom:12px;font-size:14px;font-family:inherit;text-align:right}
+  .login-card input:focus{outline:none;border-color:var(--accent)}
+  .login-card button{width:100%;padding:13px;background:var(--accent);color:#000;border:none;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+  .error{color:var(--danger);font-size:13px;text-align:center;margin-top:12px}
+
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #222;flex-wrap:wrap;gap:10px}
+  .logout-btn{background:var(--danger);color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit}
+
+  .card{background:var(--card);padding:22px;border-radius:14px;border:1px solid #222;margin-bottom:20px}
+  .card h2{font-size:17px;color:var(--accent);margin-bottom:16px}
+  .form-row{margin-bottom:12px}
+  .form-row label{display:block;font-size:13px;font-weight:700;margin-bottom:5px;color:#ddd}
+  .form-row input,.form-row textarea,.form-row select{width:100%;padding:11px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:var(--text);font-size:14px;font-family:inherit}
+  .form-row input:focus,.form-row textarea:focus,.form-row select:focus{outline:none;border-color:var(--accent)}
+  .form-row textarea{resize:vertical;min-height:70px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  .img-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .img-tools input[type=file]{display:none}
+  .img-tools label{background:#333;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+  .img-tools label:hover{background:#444}
+  .img-tools .clear-all{background:#5a2222;color:#f99;padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+  .img-tools .clear-all:hover{background:#7a2a2a}
+
+  .img-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:12px}
+  .img-thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid #333;background:#0a0a0a}
+  .img-thumb img{width:100%;height:100%;object-fit:cover}
+  .img-thumb .rm{position:absolute;top:3px;right:3px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .img-thumb .primary{position:absolute;bottom:3px;left:3px;background:var(--accent);color:#000;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px}
+
+  .btn-primary{background:var(--accent);color:#000;padding:12px 24px;border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+  .btn-primary:hover{background:#e0e0e0}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+  .btn-secondary{background:#333;color:#fff;padding:12px 24px;border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;margin-right:8px;font-family:inherit}
+
+  .product-item{background:#0a0a0a;border:1px solid #222;border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .product-item img{width:56px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .product-item .info{flex:1;min-width:180px}
+  .product-item .info strong{display:block;margin-bottom:3px;font-size:14px}
+  .product-item .info span{font-size:12px;color:var(--muted)}
+  .product-item .info .cat-badge{display:inline-block;background:rgba(192,192,192,.15);color:var(--accent);font-size:10px;padding:2px 8px;border-radius:10px;margin-top:4px;font-weight:700}
+  .product-item .actions{display:flex;gap:6px}
+  .product-item button{padding:7px 12px;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+  .edit-btn{background:#3b82f6;color:#fff}
+  .delete-btn{background:var(--danger);color:#fff}
+
+  .empty{text-align:center;color:var(--muted);padding:30px;font-size:14px}
+  .status{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none}
+  .status.success{display:block;background:rgba(34,197,94,.15);color:var(--success);border:1px solid rgba(34,197,94,.3)}
+  .status.error{display:block;background:rgba(230,57,70,.15);color:var(--danger);border:1px solid rgba(230,57,70,.3)}
+
+  .hidden{display:none !important}
+  @media(max-width:600px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="container" id="loginView">
+  <div class="login-card">
+    <img src="logo.jpg" alt="LUMI">
+    <input type="email" id="email" placeholder="البريد الإلكتروني" autocomplete="username">
+    <input type="password" id="password" placeholder="كلمة المرور" autocomplete="current-password">
+    <button id="loginBtn">تسجيل الدخول</button>
+    <div class="error" id="loginError"></div>
+  </div>
+</div>
+
+<div class="container hidden" id="dashboard">
+  <div class="topbar">
+    <div>
+      <h1>⚙️ لوحة تحكم LUMI</h1>
+      <p class="subtitle">أضف المنتجات، اختر قسمها، وأضف حتى 6 صور لكل منتج</p>
+    </div>
+    <button class="logout-btn" id="logoutBtn">🚪 خروج</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="card">
+    <h2 id="formTitle">➕ إضافة منتج جديد</h2>
+    <form id="productForm">
+      <input type="hidden" id="productId">
+
+      <div class="form-row">
+        <label>اسم المنتج *</label>
+        <input type="text" id="name" required placeholder="مثال: تيشيرت قطن أوفر سايز">
+      </div>
+
+      <div class="form-row">
+        <label>القسم *</label>
+        <select id="category" required><option value="">— اختر القسم —</option></select>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-row"><label>السعر (ج.م) *</label><input type="number" id="price" required min="1" placeholder="250"></div>
+        <div class="form-row"><label>السعر قبل الخصم (اختياري)</label><input type="number" id="oldPrice" min="0" placeholder="350"></div>
+      </div>
+
+      <div class="form-row">
+        <label>الوصف (اختياري)</label>
+        <textarea id="desc" placeholder="مثال: قطن 100% — مقاسات M / L / XL"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>صور المنتج (حتى 6 صور)</label>
+        <textarea id="imageUrls" placeholder="الصق روابط صور هنا، سطر لكل رابط:&#10;https://example.com/img1.jpg&#10;https://example.com/img2.jpg" style="min-height:70px"></textarea>
+        <div class="img-tools">
+          <input type="file" id="imageFile" accept="image/*" multiple>
+          <label for="imageFile">📤 رفع صور من الجهاز</label>
+          <button type="button" class="clear-all" id="clearImages">🗑️ مسح كل الصور</button>
+        </div>
+        <div class="img-gallery" id="imgGallery"></div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submitBtn">إضافة المنتج</button>
+      <button type="button" class="btn-secondary hidden" id="cancelBtn">إلغاء</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>📦 المنتجات (<span id="count">0</span>)</h2>
+    <div id="list"><div class="empty">جاري التحميل...</div></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { firebaseConfig, CATEGORIES } from "./firebase-config.js";
+import { getMainImage, getImages } from "./common.js";
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+const loginView = document.getElementById("loginView");
+const dashboard = document.getElementById("dashboard");
+const loginError = document.getElementById("loginError");
+
+document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  loginError.textContent = "";
+  if (!email || !password) { loginError.textContent = "أدخل البريد وكلمة المرور"; return; }
+  try { await signInWithEmailAndPassword(auth, email, password); }
+  catch { loginError.textContent = "❌ بيانات غير صحيحة."; }
+};
+document.getElementById("password").addEventListener("keypress", e => {
+  if (e.key === "Enter") document.getElementById("loginBtn").click();
+});
+document.getElementById("logoutBtn").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  if (user) { loginView.classList.add("hidden"); dashboard.classList.remove("hidden"); startProductsListener(); }
+  else      { dashboard.classList.add("hidden"); loginView.classList.remove("hidden"); }
+});
+
+const catSelect = document.getElementById("category");
+catSelect.innerHTML = '<option value="">— اختر القسم —</option>' +
+  CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("");
+
+let currentImages = [];
+const imgGallery = document.getElementById("imgGallery");
+
+function renderGallery() {
+  imgGallery.innerHTML = currentImages.map((src, i) => `
+    <div class="img-thumb">
+      <img src="${src}" alt="">
+      <button type="button" class="rm" data-rm="${i}">×</button>
+      ${i === 0 ? '<span class="primary">رئيسية</span>' : ""}
+    </div>
+  `).join("");
+  imgGallery.querySelectorAll(".rm").forEach(b => b.onclick = () => {
+    currentImages.splice(+b.dataset.rm, 1); renderGallery();
+  });
+}
+
+function setImages(arr) {
+  currentImages = (arr || []).filter(Boolean).slice(0, 6);
+  renderGallery();
+}
+
+document.getElementById("clearImages").onclick = () => { currentImages = []; renderGallery(); };
+
+document.getElementById("imageUrls").addEventListener("input", e => {
+  const urls = e.target.value.split("\n").map(s => s.trim()).filter(Boolean);
+  const fromFiles = currentImages.filter(s => s.startsWith("data:"));
+  setImages([...urls, ...fromFiles]);
+});
+
+function compressImage(file, maxW = 900, quality = 0.72) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const scale = Math.min(1, maxW / img.width);
+        canvas.width  = img.width  * scale;
+        canvas.height = img.height * scale;
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("imageFile").addEventListener("change", async e => {
+  const files = Array.from(e.target.files || []).slice(0, 6 - currentImages.length);
+  if (!files.length) return;
+  try {
+    for (const file of files) {
+      if (file.size > 8 * 1024 * 1024) { showStatus(`الصورة ${file.name} كبيرة جدًا`, "error"); continue; }
+      const b64 = await compressImage(file);
+      currentImages.push(b64);
+      renderGallery();
+    }
+  } catch { showStatus("تعذر معالجة إحدى الصور", "error"); }
+  e.target.value = "";
+});
+
+const form = document.getElementById("productForm");
+const formTitle = document.getElementById("formTitle");
+const submitBtn = document.getElementById("submitBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const productIdInput = document.getElementById("productId");
+const imageUrlsInput  = document.getElementById("imageUrls");
+
+function resetForm() {
+  form.reset();
+  productIdInput.value = "";
+  setImages([]);
+  formTitle.textContent = "➕ إضافة منتج جديد";
+  submitBtn.textContent = "إضافة المنتج";
+  cancelBtn.classList.add("hidden");
+}
+cancelBtn.onclick = resetForm;
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+
+  const data = {
+    name: document.getElementById("name").value.trim(),
+    category: catSelect.value,
+    price: +document.getElementById("price").value,
+    oldPrice: document.getElementById("oldPrice").value ? +document.getElementById("oldPrice").value : null,
+    desc: document.getElementById("desc").value.trim(),
+    images: currentImages,
+    image: currentImages[0] || ""
+  };
+
+  try {
+    const id = productIdInput.value;
+    if (id) {
+      await updateDoc(doc(db, "products", id), data);
+      showStatus("✅ تم تعديل المنتج بنجاح", "success");
+    } else {
+      await addDoc(collection(db, "products"), { ...data, createdAt: serverTimestamp() });
+      showStatus("✅ تمت إضافة المنتج — يظهر للعملاء فورًا", "success");
+    }
+    resetForm();
+  } catch (err) {
+    console.error(err);
+    showStatus("❌ خطأ أثناء الحفظ: " + (err.code || err.message), "error");
+  }
+  submitBtn.disabled = false;
+});
+
+let unsubscribe = null;
+let productsCache = [];
+
+function startProductsListener() {
+  if (unsubscribe) unsubscribe();
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  unsubscribe = onSnapshot(q, snap => {
+    productsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderList();
+  }, err => {
+    console.error(err);
+    document.getElementById("list").innerHTML = '<div class="empty">⚠️ تعذّر تحميل المنتجات.</div>';
+  });
+}
+
+function renderList() {
+  document.getElementById("count").textContent = productsCache.length;
+  const list = document.getElementById("list");
+  if (productsCache.length === 0) {
+    list.innerHTML = '<div class="empty">لا توجد منتجات بعد — أضف أول منتج.</div>';
+    return;
+  }
+  list.innerHTML = productsCache.map(p => {
+    const imgs = getImages(p);
+    const main = getMainImage(p) || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><rect fill='%23222' width='60' height='60'/></svg>";
+    return `
+      <div class="product-item">
+        <img src="${main}" alt="">
+        <div class="info">
+          <strong>${p.name}</strong>
+          <span>${p.price} ج.م${p.oldPrice ? " — قبل: " + p.oldPrice + " ج.م" : ""} · ${imgs.length} صورة</span>
+          ${p.category ? `<div class="cat-badge">${p.category}</div>` : ""}
+        </div>
+        <div class="actions">
+          <button class="edit-btn" data-id="${p.id}">تعديل</button>
+          <button class="delete-btn" data-id="${p.id}">حذف</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  list.querySelectorAll(".edit-btn").forEach(b => b.onclick = () => editProduct(b.dataset.id));
+  list.querySelectorAll(".delete-btn").forEach(b => b.onclick = () => deleteProduct(b.dataset.id));
+}
+
+function editProduct(id) {
+  const p = productsCache.find(x => x.id === id);
+  if (!p) return;
+  productIdInput.value = p.id;
+  document.getElementById("name").value = p.name || "";
+  catSelect.value = p.category || "";
+  document.getElementById("price").value = p.price || "";
+  document.getElementById("oldPrice").value = p.oldPrice || "";
+  document.getElementById("desc").value = p.desc || "";
+  const imgs = getImages(p);
+  imageUrlsInput.value = imgs.filter(s => s.startsWith("http")).join("\n");
+  setImages(imgs);
+  formTitle.textContent = "✏️ تعديل المنتج";
+  submitBtn.textContent = "حفظ التعديلات";
+  cancelBtn.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteProduct(id) {
+  if (!confirm("تأكيد حذف المنتج نهائيًا؟")) return;
+  try { await deleteDoc(doc(db, "products", id)); showStatus("🗑️ تم حذف المنتج", "success"); }
+  catch { showStatus("❌ تعذر الحذف", "error"); }
+}
+
+let statusTimer;
+function showStatus(msg, type) {
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.className = "status " + type;
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => { el.className = "status"; }, 5000);
+}
+</script>
+</body>
+</html>

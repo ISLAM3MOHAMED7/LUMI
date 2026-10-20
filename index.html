@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMI | متجر الملابس العصرية</title>
+<link rel="icon" href="logo.jpg">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
+  :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#c0c0c0;--danger:#e63946}
+  body{background:var(--bg);color:var(--text);min-height:100vh}
+  a{color:inherit;text-decoration:none}
+
+  header{background:#000;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:100}
+  .logo img{height:45px;width:auto;object-fit:contain;border-radius:4px}
+  .header-actions{display:flex;gap:10px;align-items:center}
+  .icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid #222;font-size:20px;transition:.2s}
+  .icon-btn:hover{border-color:var(--accent)}
+  .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:none;align-items:center;justify-content:center}
+  .cart-badge.show{display:inline-flex}
+
+  .hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(180deg,#000 0%,#0a0a0a 100%)}
+  .hero h1{font-size:38px;margin-bottom:8px; letter-spacing:2px}
+  .hero h1 span{color:var(--accent)}
+  .hero p{color:var(--muted);font-size:15px}
+
+  .filters{max-width:1200px;margin:0 auto 16px;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap}
+  .search{flex:1;min-width:200px;padding:12px 16px;background:var(--card);border:1px solid #222;border-radius:10px;color:var(--text);font-size:14px}
+  .search:focus{outline:none;border-color:var(--accent)}
+  .sort{padding:12px 16px;background:var(--card);border:1px solid #222;border-radius:10px;color:var(--text);font-size:14px;cursor:pointer}
+
+  .cats{max-width:1200px;margin:0 auto 24px;padding:0 24px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+  .cats::-webkit-scrollbar{display:none}
+  .cat{flex-shrink:0;padding:9px 18px;background:var(--card);border:1px solid #222;border-radius:30px;color:#ccc;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap}
+  .cat:hover{border-color:var(--accent)}
+  .cat.active{background:var(--accent);color:#000;border-color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding:0 24px 60px;max-width:1200px;margin:auto}
+  .card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid #222;transition:transform .2s,border-color .2s;display:flex;flex-direction:column;position:relative}
+  .card:hover{transform:translateY(-4px);border-color:#333;box-shadow:0 10px 30px rgba(192,192,192,.1)}
+  .card-img{width:100%;height:260px;background:#1a1a1a;overflow:hidden;display:block;position:relative}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+  .card:hover .card-img img{transform:scale(1.04)}
+  .badge-disc{position:absolute;top:10px;right:10px;background:var(--danger);color:#fff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;z-index:2}
+  .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card h3{font-size:16px;font-weight:700;line-height:1.3}
+  .card h3 a:hover{color:var(--accent)}
+  .cat-tag{font-size:11px;color:var(--accent);letter-spacing:1px;font-weight:600}
+  .price-row{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px}
+  .price{font-size:18px;font-weight:800;color:var(--accent)}
+  .old-price{font-size:13px;color:#666;text-decoration:line-through}
+  .add-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--accent);color:#000;padding:10px;border-radius:8px;font-weight:700;font-size:13px;border:none;cursor:pointer;margin-top:8px;transition:.2s;font-family:inherit}
+  .add-btn:hover{background:#e0e0e0}
+  .add-btn:active{transform:scale(.97)}
+
+  .empty,.loading{text-align:center;padding:80px 20px;color:var(--muted);grid-column:1/-1}
+
+  footer{text-align:center;padding:24px;background:#000;color:#666;border-top:1px solid #222;font-size:13px}
+  footer a{color:var(--accent)}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;padding:12px 22px;border-radius:30px;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}
+
+  @media(max-width:600px){.hero h1{font-size:28px}.logo img{height:35px}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 14px 40px}.card-img{height:200px}.filters,.cats{padding:0 14px}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html"><img src="logo.jpg" alt="LUMI"></a>
+  <div class="header-actions">
+    <a class="icon-btn" id="waBtn" href="#" target="_blank" title="تواصل واتساب">💬</a>
+    <a class="icon-btn" href="cart.html" title="السلة">🛒<span class="cart-badge" id="cartBadge">0</span></a>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>مرحبًا بك في <span>LUMI</span></h1>
+  <p>تشكيلة حصرية من الملابس العصرية</p>
+</section>
+
+<div class="filters">
+  <input type="text" class="search" id="search" placeholder="🔍 ابحث عن منتج...">
+  <select class="sort" id="sort">
+    <option value="newest">الأحدث</option>
+    <option value="price-asc">السعر: الأقل أولاً</option>
+    <option value="price-desc">السعر: الأعلى أولاً</option>
+  </select>
+</div>
+
+<div class="cats" id="cats"></div>
+
+<main class="grid" id="grid">
+  <div class="loading">⏳ جاري تحميل المنتجات...</div>
+</main>
+
+<footer>
+  جميع الحقوق محفوظة &copy; <span id="year"></span> — <strong>LUMI</strong> | للتواصل: <a id="footPhone" href="#">—</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { db, addToCart, refreshCartBadge, money, getMainImage, PLACEHOLDER_IMG } from "./common.js";
+import { ADMIN_WHATSAPP, STORE_PHONE_DISPLAY, CATEGORIES } from "./firebase-config.js";
+import { collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("waBtn").href = `https://wa.me/${ADMIN_WHATSAPP}`;
+const fp = document.getElementById("footPhone");
+fp.href = `https://wa.me/${ADMIN_WHATSAPP}`;
+fp.textContent = STORE_PHONE_DISPLAY;
+
+refreshCartBadge();
+window.addEventListener("cartUpdated", refreshCartBadge);
+
+const catsEl = document.getElementById("cats");
+let activeCat = "الكل";
+
+function renderCats() {
+  const all = ["الكل", ...CATEGORIES];
+  catsEl.innerHTML = all.map(c => `<button class="cat ${c === activeCat ? "active" : ""}" data-cat="${c}">${c}</button>`).join("");
+  catsEl.querySelectorAll(".cat").forEach(b => {
+    b.onclick = () => { activeCat = b.dataset.cat; renderCats(); render(); };
+  });
+}
+renderCats();
+
+let allProducts = [];
+const grid = document.getElementById("grid");
+const searchEl = document.getElementById("search");
+const sortEl = document.getElementById("sort");
+const toast = document.getElementById("toast");
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function render() {
+  let items = [...allProducts];
+  if (activeCat !== "الكل") items = items.filter(p => (p.category || "") === activeCat);
+  const term = searchEl.value.trim().toLowerCase();
+  if (term) items = items.filter(p => (p.name || "").toLowerCase().includes(term) || (p.desc || "").toLowerCase().includes(term));
+  const s = sortEl.value;
+  if (s === "price-asc")  items.sort((a,b) => (+a.price||0) - (+b.price||0));
+  if (s === "price-desc") items.sort((a,b) => (+b.price||0) - (+a.price||0));
+
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="empty">🛍️ لا توجد منتجات مطابقة — جرّب قسمًا آخر.</div>';
+    return;
+  }
+
+  grid.innerHTML = items.map(p => {
+    const img = getMainImage(p) || PLACEHOLDER_IMG;
+    const hasDisc = p.oldPrice && +p.oldPrice > +p.price;
+    return `
+      <div class="card" data-id="${p.id}">
+        <a class="card-img" href="product.html?id=${p.id}">
+          <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'">
+          ${hasDisc ? '<span class="badge-disc">خصم</span>' : ''}
+        </a>
+        <div class="card-body">
+          ${p.category ? `<div class="cat-tag">${p.category}</div>` : ''}
+          <h3><a href="product.html?id=${p.id}">${p.name || 'بدون اسم'}</a></h3>
+          <div class="price-row">
+            <span class="price">${money(p.price)}</span>
+            ${hasDisc ? `<span class="old-price">${money(p.oldPrice)}</span>` : ''}
+          </div>
+          <button class="add-btn" data-add="${p.id}">🛒 أضف للسلة</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  grid.querySelectorAll("[data-add]").forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const p = allProducts.find(x => x.id === btn.dataset.add);
+      if (!p) return;
+      addToCart(p, 1);
+      showToast(`✅ تمت إضافة «${p.name}» للسلة`);
+    };
+  });
+}
+
+const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+onSnapshot(q, snap => {
+  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+}, err => {
+  console.error(err);
+  grid.innerHTML = '<div class="empty">⚠️ تعذّر تحميل المنتجات. تحقق من إعداد Firebase.</div>';
+});
+
+searchEl.addEventListener("input", render);
+sortEl.addEventListener("change", render);
+</script>
+</body>
+</html>

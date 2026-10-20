@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>السلة | LUMI</title>
+<link rel="icon" href="logo.jpg">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
+  :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#c0c0c0;--danger:#e63946;--success:#22c55e}
+  body{background:var(--bg);color:var(--text);min-height:100vh}
+  a{color:inherit;text-decoration:none}
+
+  header{background:#000;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:100}
+  .logo img{height:45px;width:auto;object-fit:contain;border-radius:4px}
+  .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid #222;font-size:20px;transition:.2s}
+  .icon-btn:hover{border-color:var(--accent)}
+
+  .back{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:13px;color:var(--muted)}
+  .back a{color:var(--accent)}
+
+  .page-title{max-width:1100px;margin:20px auto 0;padding:0 24px}
+  .page-title h1{font-size:26px;margin-bottom:4px}
+  .page-title p{color:var(--muted);font-size:13px}
+
+  .cart-layout{max-width:1100px;margin:24px auto 60px;padding:0 24px;display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:flex-start}
+
+  .cart-items{background:var(--card);border:1px solid #222;border-radius:14px;padding:8px}
+  .cart-item{display:grid;grid-template-columns:80px 1fr auto;gap:14px;padding:14px;border-bottom:1px solid #222;align-items:center}
+  .cart-item:last-child{border-bottom:none}
+  .cart-item-img{width:80px;height:80px;border-radius:10px;overflow:hidden;background:#1a1a1a}
+  .cart-item-img img{width:100%;height:100%;object-fit:cover}
+  .cart-item-info h3{font-size:15px;margin-bottom:6px}
+  .cart-item-info .item-price{color:var(--accent);font-weight:700;font-size:14px}
+  .cart-item-qty{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .qty-ctrl{display:inline-flex;align-items:center;border:1px solid #333;border-radius:8px;overflow:hidden}
+  .qty-ctrl button{background:none;border:none;color:var(--text);font-size:16px;width:32px;height:34px;cursor:pointer;transition:.2s;font-family:inherit}
+  .qty-ctrl button:hover{background:#222}
+  .qty-ctrl span{min-width:32px;text-align:center;font-weight:700;font-size:14px}
+  .remove-btn{background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline}
+  .line-total{font-weight:800;color:var(--accent);font-size:16px;text-align:left;white-space:nowrap}
+
+  .empty-cart{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty-cart a{color:var(--accent);display:inline-block;margin-top:12px;padding:12px 24px;background:var(--accent);color:#000;border-radius:10px;font-weight:700}
+
+  .summary{background:var(--card);border:1px solid #222;border-radius:14px;padding:22px;position:sticky;top:90px}
+  .summary h2{font-size:17px;margin-bottom:16px;color:var(--accent)}
+  .form-row{margin-bottom:12px}
+  .form-row label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#ccc}
+  .form-row input,.form-row select,.form-row textarea{width:100%;padding:10px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:var(--text);font-size:13px;font-family:inherit}
+  .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent)}
+  .form-row textarea{resize:vertical;min-height:50px}
+
+  .totals{border-top:1px solid #222;margin-top:14px;padding-top:14px}
+  .totals-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px}
+  .totals-row.total{font-size:18px;font-weight:800;color:var(--accent);border-top:1px solid #222;margin-top:8px;padding-top:12px}
+
+  .send-btn{width:100%;padding:15px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:800;font-size:15px;cursor:pointer;margin-top:16px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+  .send-btn:hover{background:#1fb955}
+  .send-btn:disabled{opacity:.4;cursor:not-allowed}
+
+  .notice{font-size:12px;color:var(--muted);margin-top:10px;text-align:center;line-height:1.6}
+
+  @media(max-width:900px){
+    .cart-layout{grid-template-columns:1fr;gap:16px}
+    .summary{position:static}
+    .cart-item{grid-template-columns:60px 1fr;gap:10px}
+    .cart-item-img{width:60px;height:60px}
+    .line-total{grid-column:2;text-align:right}
+    .logo img{height:35px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html"><img src="logo.jpg" alt="LUMI"></a>
+  <a class="icon-btn" href="index.html">🏠</a>
+</header>
+
+<div class="back"><a href="index.html">← متابعة التسوق</a></div>
+
+<div class="page-title">
+  <h1>🛒 سلة المشتريات</h1>
+  <p>راجع طلبك وأدخل بيانات الشحن لإتمام الطلب</p>
+</div>
+
+<main class="cart-layout" id="app"></main>
+
+<script type="module">
+import { getCart, updateQty, removeFromCart, cartSubtotal, money, PLACEHOLDER_IMG, clearCart } from "./common.js";
+import { SHIPPING_RATES, DEFAULT_SHIPPING, ADMIN_WHATSAPP, STORE_PHONE_DISPLAY } from "./firebase-config.js";
+
+const appEl = document.getElementById("app");
+let formState = { name: "", phone: "", gov: "", address: "", notes: "" };
+
+function render() {
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    appEl.innerHTML = `
+      <div style="grid-column:1/-1;background:var(--card);border:1px solid #222;border-radius:14px">
+        <div class="empty-cart">
+          <div style="font-size:64px;margin-bottom:12px">🛍️</div>
+          <p style="font-size:16px;margin-bottom:6px">سلتك فارغة حاليًا</p>
+          <p style="font-size:13px">تصفّح تشكيلتنا وأضف ما يعجبك</p>
+          <a href="index.html">← تسوق الآن</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const subtotal = cartSubtotal();
+  const shipping = formState.gov ? (SHIPPING_RATES[formState.gov] ?? DEFAULT_SHIPPING) : 0;
+  const total = subtotal + shipping;
+
+  const govOptions = Object.keys(SHIPPING_RATES)
+    .map(g => `<option value="${g}" ${formState.gov === g ? "selected" : ""}>${g} — ${SHIPPING_RATES[g]} ج.م</option>`)
+    .join("");
+
+  appEl.innerHTML = `
+    <div>
+      <div class="cart-items">
+        ${cart.map(item => `
+          <div class="cart-item">
+            <div class="cart-item-img"><img src="${item.image || PLACEHOLDER_IMG}" alt="" onerror="this.src='${PLACEHOLDER_IMG}'"></div>
+            <div class="cart-item-info">
+              <h3>${item.name}</h3>
+              <div class="item-price">${money(item.price)}</div>
+              <div class="cart-item-qty">
+                <div class="qty-ctrl">
+                  <button data-dec="${item.id}">−</button>
+                  <span>${item.qty}</span>
+                  <button data-inc="${item.id}">+</button>
+                </div>
+                <button class="remove-btn" data-rm="${item.id}">حذف</button>
+              </div>
+            </div>
+            <div class="line-total">${money(item.price * item.qty)}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    <aside class="summary">
+      <h2>📋 بيانات الشحن</h2>
+      <div class="form-row"><label>الاسم بالكامل *</label><input type="text" id="fName" value="${formState.name}" placeholder="مثال: أحمد محمد"></div>
+      <div class="form-row"><label>رقم الهاتف *</label><input type="tel" id="fPhone" value="${formState.phone}" placeholder="01xxxxxxxxx"></div>
+      <div class="form-row"><label>المحافظة *</label>
+        <select id="fGov"><option value="">— اختر المحافظة —</option>${govOptions}</select>
+      </div>
+      <div class="form-row"><label>العنوان التفصيلي *</label><textarea id="fAddress" placeholder="الشارع، رقم المبنى، علامة مميزة...">${formState.address}</textarea></div>
+      <div class="form-row"><label>ملاحظات (اختياري)</label><textarea id="fNotes" placeholder="مقاس معين، لون، وقت توصيل مناسب...">${formState.notes}</textarea></div>
+
+      <div class="totals">
+        <div class="totals-row"><span>المجموع الفرعي</span><span>${money(subtotal)}</span></div>
+        <div class="totals-row"><span>الشحن</span><span>${formState.gov ? money(shipping) : "—"}</span></div>
+        <div class="totals-row total"><span>الإجمالي</span><span>${formState.gov ? money(total) : money(subtotal) + " + الشحن"}</span></div>
+      </div>
+
+      <button class="send-btn" id="sendBtn" ${!formState.gov ? "disabled" : ""}>📱 إرسال الطلب واتساب</button>
+      <p class="notice">بعد الإرسال سيتم تحويلك إلى واتساب مع تفاصيل طلبك جاهزة — نحن بانتظارك على ${STORE_PHONE_DISPLAY}</p>
+    </aside>
+  `;
+
+  appEl.querySelectorAll("[data-inc]").forEach(b => b.onclick = () => {
+    const item = cart.find(x => x.id === b.dataset.inc);
+    updateQty(b.dataset.inc, item.qty + 1); render();
+  });
+  appEl.querySelectorAll("[data-dec]").forEach(b => b.onclick = () => {
+    const item = cart.find(x => x.id === b.dataset.dec);
+    updateQty(b.dataset.dec, item.qty - 1); render();
+  });
+  appEl.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => {
+    if (confirm("إزالة هذا المنتج من السلة؟")) { removeFromCart(b.dataset.rm); render(); }
+  });
+
+  document.getElementById("fName").oninput    = e => formState.name = e.target.value;
+  document.getElementById("fPhone").oninput   = e => formState.phone = e.target.value;
+  document.getElementById("fAddress").oninput = e => formState.address = e.target.value;
+  document.getElementById("fNotes").oninput   = e => formState.notes = e.target.value;
+  document.getElementById("fGov").onchange    = e => {
+    formState.gov = e.target.value;
+    render();
+    document.getElementById("fName").value    = formState.name;
+    document.getElementById("fPhone").value   = formState.phone;
+    document.getElementById("fAddress").value = formState.address;
+    document.getElementById("fNotes").value   = formState.notes;
+    document.getElementById("fGov").value     = formState.gov;
+  };
+
+  document.getElementById("sendBtn").onclick = sendOrder;
+}
+
+function sendOrder() {
+  const cart = getCart();
+  if (cart.length === 0) return;
+
+  const errors = [];
+  if (!formState.name.trim())    errors.push("الاسم");
+  if (!/^01\d{9}$/.test(formState.phone.trim().replace(/\s/g,""))) errors.push("رقم هاتف صحيح (11 رقم يبدأ بـ 01)");
+  if (!formState.gov)            errors.push("المحافظة");
+  if (!formState.address.trim()) errors.push("العنوان");
+  if (errors.length) { alert("⚠️ من فضلك أدخل: " + errors.join("، ")); return; }
+
+  const subtotal = cartSubtotal();
+  const shipping = SHIPPING_RATES[formState.gov] ?? DEFAULT_SHIPPING;
+  const total = subtotal + shipping;
+
+  const lines = [
+    "🛒 *طلب جديد — LUMI*",
+    "",
+    "👤 *الاسم:* " + formState.name.trim(),
+    "📱 *الهاتف:* " + formState.phone.trim(),
+    "📍 *المحافظة:* " + formState.gov,
+    "🏠 *العنوان:* " + formState.address.trim(),
+    formState.notes.trim() ? "📝 *ملاحظات:* " + formState.notes.trim() : null,
+    "",
+    "📦 *المنتجات:*",
+    ...cart.map(i => `• ${i.name} × ${i.qty} = ${i.price * i.qty} ج.م`),
+    "",
+    "💰 *المجموع الفرعي:* " + subtotal + " ج.م",
+    "🚚 *الشحن (" + formState.gov + "):* " + shipping + " ج.م",
+    "✅ *الإجمالي:* " + total + " ج.م"
+  ].filter(x => x !== null).join("\n");
+
+  const url = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(lines)}`;
+  window.open(url, "_blank");
+
+  setTimeout(() => {
+    if (confirm("✅ تم فتح واتساب لإرسال الطلب.\nهل تريد تفريغ السلة الآن؟")) {
+      clearCart();
+      render();
+    }
+  }, 800);
+}
+
+render();
+</script>
+</body>
+</html>
