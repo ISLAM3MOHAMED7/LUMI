@@ -3,12 +3,14 @@
 // ============================================================
 
 export const firebaseConfig = {
-  apiKey:            "PASTE_YOUR_API_KEY",
-  authDomain:        "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId:         "PASTE_YOUR_PROJECT_ID",
-  storageBucket:     "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId:             "PASTE_APP_ID"
+  apiKey: "AIzaSyDlY4Q_EBhgT9diIs1a7VqwqtYnXfXnwnE",
+  authDomain: "lumi-663cd.firebaseapp.com",
+  databaseURL: "https://lumi-663cd-default-rtdb.firebaseio.com",
+  projectId: "lumi-663cd",
+  storageBucket: "lumi-663cd.firebasestorage.app",
+  messagingSenderId: "411759593749",
+  appId: "1:411759593749:web:ef4420c1d32d9b1a09411c",
+  measurementId: "G-21EK8S7GJM"
 };
 
 // ===== معلومات المتجر =====
