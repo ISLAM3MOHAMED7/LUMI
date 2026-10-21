@@ -3,73 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>السلة | LUMI</title>
+<title>LUMI | متجر الملابس العصرية</title>
 <link rel="icon" href="logo.jpg">
+<!-- مكتبة الأيقونات الأصلية Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
-  :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#c0c0c0;--danger:#e63946;--success:#22c55e}
+  :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#c0c0c0;--danger:#e63946}
   body{background:var(--bg);color:var(--text);min-height:100vh}
   a{color:inherit;text-decoration:none}
 
+  /* الهيدر وأيقونات السوشيال */
   header{background:#000;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
   .logo img{height:45px;width:auto;object-fit:contain;border-radius:4px}
-  .header-actions{display:flex;gap:8px;align-items:center}
-  .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid #222;transition:.2s;color:#fff;font-size:18px}
-  .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  
+  .icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid #222;transition:.2s;color:#fff;font-size:18px}
+  .icon-btn:hover{border-color:var(--accent);transform:translateY(-2px);color:var(--accent)}
+  
+  /* ألوان مخصصة للأيقونات الأصلية عند الوقوف عليها */
+  .icon-btn:hover .fa-instagram { color: #E1306C; }
+  .icon-btn:hover .fa-facebook-f { color: #1877F2; }
+  .icon-btn:hover .fa-tiktok { color: #fff; }
+  .icon-btn:hover .fa-whatsapp { color: #25D366; }
 
-  .back{max-width:1100px;margin:16px auto 0;padding:0 24px;font-size:13px;color:var(--muted)}
-  .back a{color:var(--accent)}
+  .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:none;align-items:center;justify-content:center}
+  .cart-badge.show{display:inline-flex}
 
-  .page-title{max-width:1100px;margin:20px auto 0;padding:0 24px}
-  .page-title h1{font-size:26px;margin-bottom:4px}
-  .page-title p{color:var(--muted);font-size:13px}
+  /* التصميم الرئيسي */
+  .hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(180deg,#000 0%,#0a0a0a 100%)}
+  .hero h1{font-size:42px;margin-bottom:12px; letter-spacing:2px; display:flex; align-items:center; justify-content:center; gap:10px;}
+  .hero h1 span{color:var(--accent); font-size:36px;}
+  .hero p{color:var(--accent);font-size:18px; font-weight:600; margin-bottom:4px; letter-spacing:1px; font-style:italic;}
+  
+  .filters{max-width:1200px;margin:0 auto 16px;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap}
+  .search{flex:1;min-width:200px;padding:12px 16px;background:var(--card);border:1px solid #222;border-radius:10px;color:var(--text);font-size:14px}
+  .search:focus{outline:none;border-color:var(--accent)}
+  .sort{padding:12px 16px;background:var(--card);border:1px solid #222;border-radius:10px;color:var(--text);font-size:14px;cursor:pointer}
 
-  .cart-layout{max-width:1100px;margin:24px auto 60px;padding:0 24px;display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:flex-start}
+  .cats{max-width:1200px;margin:0 auto 24px;padding:0 24px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+  .cats::-webkit-scrollbar{display:none}
+  .cat{flex-shrink:0;padding:9px 18px;background:var(--card);border:1px solid #222;border-radius:30px;color:#ccc;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap}
+  .cat:hover{border-color:var(--accent)}
+  .cat.active{background:var(--accent);color:#000;border-color:var(--accent)}
 
-  .cart-items{background:var(--card);border:1px solid #222;border-radius:14px;padding:8px}
-  .cart-item{display:grid;grid-template-columns:80px 1fr auto;gap:14px;padding:14px;border-bottom:1px solid #222;align-items:center}
-  .cart-item:last-child{border-bottom:none}
-  .cart-item-img{width:80px;height:80px;border-radius:10px;overflow:hidden;background:#1a1a1a}
-  .cart-item-img img{width:100%;height:100%;object-fit:cover}
-  .cart-item-info h3{font-size:15px;margin-bottom:6px}
-  .cart-item-info .item-price{color:var(--accent);font-weight:700;font-size:14px}
-  .cart-item-qty{display:flex;align-items:center;gap:10px;margin-top:8px}
-  .qty-ctrl{display:inline-flex;align-items:center;border:1px solid #333;border-radius:8px;overflow:hidden}
-  .qty-ctrl button{background:none;border:none;color:var(--text);font-size:16px;width:32px;height:34px;cursor:pointer;transition:.2s;font-family:inherit}
-  .qty-ctrl button:hover{background:#222}
-  .qty-ctrl span{min-width:32px;text-align:center;font-weight:700;font-size:14px}
-  .remove-btn{background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline}
-  .line-total{font-weight:800;color:var(--accent);font-size:16px;text-align:left;white-space:nowrap}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding:0 24px 60px;max-width:1200px;margin:auto}
+  .card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid #222;transition:transform .2s,border-color .2s;display:flex;flex-direction:column;position:relative}
+  .card:hover{transform:translateY(-4px);border-color:#333;box-shadow:0 10px 30px rgba(192,192,192,.1)}
+  .card-img{width:100%;height:260px;background:#1a1a1a;overflow:hidden;display:block;position:relative}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+  .card:hover .card-img img{transform:scale(1.04)}
+  .badge-disc{position:absolute;top:10px;right:10px;background:var(--danger);color:#fff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;z-index:2}
+  .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card h3{font-size:16px;font-weight:700;line-height:1.3}
+  .card h3 a:hover{color:var(--accent)}
+  .cat-tag{font-size:11px;color:var(--accent);letter-spacing:1px;font-weight:600}
+  .price-row{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px}
+  .price{font-size:18px;font-weight:800;color:var(--accent)}
+  .old-price{font-size:13px;color:#666;text-decoration:line-through}
+  .add-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--accent);color:#000;padding:10px;border-radius:8px;font-weight:700;font-size:13px;border:none;cursor:pointer;margin-top:8px;transition:.2s;font-family:inherit}
+  .add-btn:hover{background:#e0e0e0}
+  .add-btn:active{transform:scale(.97)}
 
-  .empty-cart{text-align:center;padding:60px 20px;color:var(--muted)}
-  .empty-cart a{color:var(--accent);display:inline-block;margin-top:12px;padding:12px 24px;background:var(--accent);color:#000;border-radius:10px;font-weight:700}
+  .empty,.loading{text-align:center;padding:80px 20px;color:var(--muted);grid-column:1/-1}
 
-  .summary{background:var(--card);border:1px solid #222;border-radius:14px;padding:22px;position:sticky;top:90px}
-  .summary h2{font-size:17px;margin-bottom:16px;color:var(--accent)}
-  .form-row{margin-bottom:12px}
-  .form-row label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#ccc}
-  .form-row input,.form-row select,.form-row textarea{width:100%;padding:10px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:var(--text);font-size:13px;font-family:inherit}
-  .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent)}
-  .form-row textarea{resize:vertical;min-height:50px}
+  /* الفوتر وأيقونات السوشيال */
+  footer{text-align:center;padding:30px 24px;background:#000;color:#666;border-top:1px solid #222;font-size:13px}
+  footer a{color:var(--accent)}
+  .social-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+  .social-links a { display: inline-flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--card); border: 1px solid #222; border-radius: 50%; transition: .2s; color:#fff; font-size: 20px; }
+  .social-links a:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .social-links a:hover .fa-instagram { color: #E1306C; }
+  .social-links a:hover .fa-facebook-f { color: #1877F2; }
+  .social-links a:hover .fa-tiktok { color: #fff; }
 
-  .totals{border-top:1px solid #222;margin-top:14px;padding-top:14px}
-  .totals-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px}
-  .totals-row.total{font-size:18px;font-weight:800;color:var(--accent);border-top:1px solid #222;margin-top:8px;padding-top:12px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;padding:12px 22px;border-radius:30px;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}
 
-  .send-btn{width:100%;padding:15px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:800;font-size:15px;cursor:pointer;margin-top:16px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
-  .send-btn:hover{background:#1fb955}
-  .send-btn:disabled{opacity:.4;cursor:not-allowed}
-
-  .notice{font-size:12px;color:var(--muted);margin-top:10px;text-align:center;line-height:1.6}
-
-  @media(max-width:900px){
-    .cart-layout{grid-template-columns:1fr;gap:16px}
-    .summary{position:static}
-    .cart-item{grid-template-columns:60px 1fr;gap:10px}
-    .cart-item-img{width:60px;height:60px}
-    .line-total{grid-column:2;text-align:right}
+  @media(max-width:600px){
+    .hero h1{font-size:32px}.hero p{font-size:16px}
     .logo img{height:35px}
+    .icon-btn{width:35px;height:35px;font-size:16px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 14px 40px}
+    .card-img{height:200px}.filters,.cats{padding:0 14px}
   }
 </style>
 </head>
@@ -78,164 +95,145 @@
 <header>
   <a class="logo" href="./"><img src="logo.jpg" alt="LUMI"></a>
   <div class="header-actions">
-    <!-- زر الهوم بيرجع للصفحة الرئيسية -->
-    <a class="icon-btn" href="./" title="الرئيسية"><i class="fa-solid fa-house"></i></a>
+    <!-- روابط السوشيال ميديا الأصلية (Font Awesome) -->
+    <a class="icon-btn" href="https://www.instagram.com/lumi.me1" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a class="icon-btn" href="https://www.facebook.com/share/1FS1JEFGwE/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a class="icon-btn" href="https://www.tiktok.com/@lume.me1" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+    
+    <!-- الواتساب والسلة -->
+    <a class="icon-btn" id="waBtn" href="#" target="_blank" title="تواصل واتساب"><i class="fa-brands fa-whatsapp"></i></a>
+    <a class="icon-btn" href="cart.html" title="السلة"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadge">0</span></a>
   </div>
 </header>
 
-<div class="back"><a href="./">← متابعة التسوق</a></div>
+<section class="hero">
+  <h1>LUMI <span>⚡</span></h1>
+  <p>_wear your Light.</p>
+  <p>_ Be the shine.</p>
+</section>
 
-<div class="page-title">
-  <h1>🛒 سلة المشتريات</h1>
-  <p>راجع طلبك وأدخل بياناتك لإتمام الطلب</p>
+<div class="filters">
+  <input type="text" class="search" id="search" placeholder="🔍 ابحث عن منتج...">
+  <select class="sort" id="sort">
+    <option value="newest">الأحدث</option>
+    <option value="price-asc">السعر: الأقل أولاً</option>
+    <option value="price-desc">السعر: الأعلى أولاً</option>
+  </select>
 </div>
 
-<main class="cart-layout" id="app"></main>
+<div class="cats" id="cats"></div>
+
+<main class="grid" id="grid">
+  <div class="loading">⏳ جاري تحميل المنتجات...</div>
+</main>
+
+<footer>
+  <div class="social-links">
+    <a href="https://www.instagram.com/lumi.me1" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://www.facebook.com/share/1FS1JEFGwE/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="https://www.tiktok.com/@lume.me1" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+  </div>
+  جميع الحقوق محفوظة &copy; <span id="year"></span> — <strong>LUMI</strong> | للتواصل: <a id="footPhone" href="#">—</a>
+</footer>
+
+<div class="toast" id="toast"></div>
 
 <script type="module">
-import { getCart, updateQty, removeFromCart, cartSubtotal, money, PLACEHOLDER_IMG, clearCart } from "./common.js";
-import { ADMIN_WHATSAPP, STORE_PHONE_DISPLAY, GOVERNORATES } from "./firebase-config.js";
+import { db, addToCart, refreshCartBadge, money, getMainImage, PLACEHOLDER_IMG } from "./common.js";
+import { ADMIN_WHATSAPP, STORE_PHONE_DISPLAY, CATEGORIES } from "./firebase-config.js";
+import { collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const appEl = document.getElementById("app");
-let formState = { name: "", phone: "", gov: "", address: "", notes: "" };
+document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("waBtn").href = `https://wa.me/${ADMIN_WHATSAPP}`;
+const fp = document.getElementById("footPhone");
+fp.href = `https://wa.me/${ADMIN_WHATSAPP}`;
+fp.textContent = STORE_PHONE_DISPLAY;
+
+refreshCartBadge();
+window.addEventListener("cartUpdated", refreshCartBadge);
+
+const catsEl = document.getElementById("cats");
+let activeCat = "الكل";
+
+function renderCats() {
+  const all = ["الكل", ...CATEGORIES];
+  catsEl.innerHTML = all.map(c => `<button class="cat ${c === activeCat ? "active" : ""}" data-cat="${c}">${c}</button>`).join("");
+  catsEl.querySelectorAll(".cat").forEach(b => {
+    b.onclick = () => { activeCat = b.dataset.cat; renderCats(); render(); };
+  });
+}
+renderCats();
+
+let allProducts = [];
+const grid = document.getElementById("grid");
+const searchEl = document.getElementById("search");
+const sortEl = document.getElementById("sort");
+const toast = document.getElementById("toast");
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
+}
 
 function render() {
-  const cart = getCart();
+  let items = [...allProducts];
+  if (activeCat !== "الكل") items = items.filter(p => (p.category || "") === activeCat);
+  const term = searchEl.value.trim().toLowerCase();
+  if (term) items = items.filter(p => (p.name || "").toLowerCase().includes(term) || (p.desc || "").toLowerCase().includes(term));
+  const s = sortEl.value;
+  if (s === "price-asc")  items.sort((a,b) => (+a.price||0) - (+b.price||0));
+  if (s === "price-desc") items.sort((a,b) => (+b.price||0) - (+a.price||0));
 
-  if (cart.length === 0) {
-    appEl.innerHTML = `
-      <div style="grid-column:1/-1;background:var(--card);border:1px solid #222;border-radius:14px">
-        <div class="empty-cart">
-          <div style="font-size:64px;margin-bottom:12px">🛍️</div>
-          <p style="font-size:16px;margin-bottom:6px">سلتك فارغة حاليًا</p>
-          <p style="font-size:13px">تصفّح تشكيلتنا وأضف ما يعجبك</p>
-          <a href="./">← تسوق الآن</a>
-        </div>
-      </div>`;
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="empty">🛍️ لا توجد منتجات مطابقة — جرّب قسمًا آخر.</div>';
     return;
   }
 
-  const subtotal = cartSubtotal();
-
-  const govOptions = GOVERNORATES
-    .map(g => `<option value="${g}" ${formState.gov === g ? "selected" : ""}>${g}</option>`)
-    .join("");
-
-  appEl.innerHTML = `
-    <div>
-      <div class="cart-items">
-        ${cart.map(item => `
-          <div class="cart-item">
-            <div class="cart-item-img"><img src="${item.image || PLACEHOLDER_IMG}" alt="" onerror="this.src='${PLACEHOLDER_IMG}'"></div>
-            <div class="cart-item-info">
-              <h3>${item.name}</h3>
-              <div class="item-price">${money(item.price)}</div>
-              <div class="cart-item-qty">
-                <div class="qty-ctrl">
-                  <button data-dec="${item.id}">−</button>
-                  <span>${item.qty}</span>
-                  <button data-inc="${item.id}">+</button>
-                </div>
-                <button class="remove-btn" data-rm="${item.id}">حذف</button>
-              </div>
-            </div>
-            <div class="line-total">${money(item.price * item.qty)}</div>
+  grid.innerHTML = items.map(p => {
+    const img = getMainImage(p) || PLACEHOLDER_IMG;
+    const hasDisc = p.oldPrice && +p.oldPrice > +p.price;
+    return `
+      <div class="card" data-id="${p.id}">
+        <a class="card-img" href="product.html?id=${p.id}">
+          <img src="${img}" alt="${p.name||''}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'">
+          ${hasDisc ? '<span class="badge-disc">خصم</span>' : ''}
+        </a>
+        <div class="card-body">
+          ${p.category ? `<div class="cat-tag">${p.category}</div>` : ''}
+          <h3><a href="product.html?id=${p.id}">${p.name || 'بدون اسم'}</a></h3>
+          <div class="price-row">
+            <span class="price">${money(p.price)}</span>
+            ${hasDisc ? `<span class="old-price">${money(p.oldPrice)}</span>` : ''}
           </div>
-        `).join("")}
-      </div>
-    </div>
-
-    <aside class="summary">
-      <h2>📋 بيانات الشحن</h2>
-      <div class="form-row"><label>الاسم بالكامل *</label><input type="text" id="fName" value="${formState.name}" placeholder="مثال: أحمد محمد"></div>
-      <div class="form-row"><label>رقم الهاتف *</label><input type="tel" id="fPhone" value="${formState.phone}" placeholder="01xxxxxxxxx"></div>
-      
-      <div class="form-row">
-        <label>المحافظة *</label>
-        <select id="fGov">
-          <option value="">— اختر المحافظة —</option>
-          ${govOptions}
-        </select>
-      </div>
-
-      <div class="form-row"><label>العنوان التفصيلي *</label><textarea id="fAddress" placeholder="الشارع، رقم المبنى، علامة مميزة...">${formState.address}</textarea></div>
-      <div class="form-row"><label>ملاحظات (اختياري)</label><textarea id="fNotes" placeholder="مقاس معين، لون، وقت توصيل مناسب...">${formState.notes}</textarea></div>
-
-      <div class="totals">
-        <div class="totals-row total"><span>إجمالي المنتجات</span><span>${money(subtotal)}</span></div>
-        <div style="font-size:12px; color:var(--danger); margin-top:8px; text-align:center; font-weight:bold;">
-          * سعر الشحن يُحسب بشكل منفصل بناءً على المحافظة.
+          <button class="add-btn" data-add="${p.id}">🛒 أضف للسلة</button>
         </div>
-      </div>
+      </div>`;
+  }).join("");
 
-      <button class="send-btn" id="sendBtn">📱 إرسال الطلب واتساب</button>
-      <p class="notice">سيتم الاتفاق على سعر الشحن مع مندوبنا على ${STORE_PHONE_DISPLAY}</p>
-    </aside>
-  `;
-
-  appEl.querySelectorAll("[data-inc]").forEach(b => b.onclick = () => {
-    const item = cart.find(x => x.id === b.dataset.inc);
-    updateQty(b.dataset.inc, item.qty + 1); render();
+  grid.querySelectorAll("[data-add]").forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const p = allProducts.find(x => x.id === btn.dataset.add);
+      if (!p) return;
+      addToCart(p, 1);
+      showToast(`✅ تمت إضافة «${p.name}» للسلة`);
+    };
   });
-  appEl.querySelectorAll("[data-dec]").forEach(b => b.onclick = () => {
-    const item = cart.find(x => x.id === b.dataset.dec);
-    updateQty(b.dataset.dec, item.qty - 1); render();
-  });
-  appEl.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => {
-    if (confirm("إزالة هذا المنتج من السلة؟")) { removeFromCart(b.dataset.rm); render(); }
-  });
-
-  document.getElementById("fName").oninput    = e => formState.name = e.target.value;
-  document.getElementById("fPhone").oninput   = e => formState.phone = e.target.value;
-  document.getElementById("fAddress").oninput = e => formState.address = e.target.value;
-  document.getElementById("fNotes").oninput   = e => formState.notes = e.target.value;
-  document.getElementById("fGov").onchange    = e => formState.gov = e.target.value;
-
-  document.getElementById("sendBtn").onclick = sendOrder;
 }
 
-function sendOrder() {
-  const cart = getCart();
-  if (cart.length === 0) return;
+const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+onSnapshot(q, snap => {
+  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  render();
+}, err => {
+  console.error(err);
+  grid.innerHTML = '<div class="empty">⚠️ تعذّر تحميل المنتجات. تحقق من إعداد Firebase.</div>';
+});
 
-  const errors = [];
-  if (!formState.name.trim())    errors.push("الاسم");
-  if (!/^01\d{9}$/.test(formState.phone.trim().replace(/\s/g,""))) errors.push("رقم هاتف صحيح (11 رقم يبدأ بـ 01)");
-  if (!formState.gov)            errors.push("المحافظة");
-  if (!formState.address.trim()) errors.push("العنوان");
-  
-  if (errors.length) { alert("⚠️ من فضلك أدخل: " + errors.join("، ")); return; }
-
-  const subtotal = cartSubtotal();
-
-  const lines = [
-    "🛒 *طلب جديد — LUMI*",
-    "",
-    "👤 *الاسم:* " + formState.name.trim(),
-    "📱 *الهاتف:* " + formState.phone.trim(),
-    "📍 *المحافظة:* " + formState.gov,
-    "🏠 *العنوان:* " + formState.address.trim(),
-    formState.notes.trim() ? "📝 *ملاحظات:* " + formState.notes.trim() : null,
-    "",
-    "📦 *المنتجات:*",
-    ...cart.map(i => `• ${i.name} × ${i.qty} = ${i.price * i.qty} ج.م`),
-    "",
-    "💰 *إجمالي المنتجات:* " + subtotal + " ج.م",
-    "🚚 *(باقي حساب سعر الشحن للمحافظة)*"
-  ].filter(x => x !== null).join("\n");
-
-  const url = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(lines)}`;
-  window.open(url, "_blank");
-
-  setTimeout(() => {
-    if (confirm("✅ تم فتح واتساب لإرسال الطلب.\nهل تريد تفريغ السلة الآن؟")) {
-      clearCart();
-      render();
-    }
-  }, 800);
-}
-
-render();
+searchEl.addEventListener("input", render);
+sortEl.addEventListener("change", render);
 </script>
 </body>
 </html>
