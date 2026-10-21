@@ -5,24 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUMI | متجر الملابس العصرية</title>
 <link rel="icon" href="logo.jpg">
-<!-- مكتبة الأيقونات الأصلية Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
   :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#c0c0c0;--danger:#e63946}
   body{background:var(--bg);color:var(--text);min-height:100vh}
   a{color:inherit;text-decoration:none}
 
-  /* الهيدر وأيقونات السوشيال */
   header{background:#000;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
   .logo img{height:45px;width:auto;object-fit:contain;border-radius:4px}
   .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  
   .icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid #222;transition:.2s;color:#fff;font-size:18px}
   .icon-btn:hover{border-color:var(--accent);transform:translateY(-2px);color:var(--accent)}
-  
-  /* ألوان مخصصة للأيقونات الأصلية عند الوقوف عليها */
   .icon-btn:hover .fa-instagram { color: #E1306C; }
   .icon-btn:hover .fa-facebook-f { color: #1877F2; }
   .icon-btn:hover .fa-tiktok { color: #fff; }
@@ -31,7 +25,6 @@
   .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:none;align-items:center;justify-content:center}
   .cart-badge.show{display:inline-flex}
 
-  /* التصميم الرئيسي */
   .hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(180deg,#000 0%,#0a0a0a 100%)}
   .hero h1{font-size:42px;margin-bottom:12px; letter-spacing:2px; display:flex; align-items:center; justify-content:center; gap:10px;}
   .hero h1 span{color:var(--accent); font-size:36px;}
@@ -68,7 +61,6 @@
 
   .empty,.loading{text-align:center;padding:80px 20px;color:var(--muted);grid-column:1/-1}
 
-  /* الفوتر وأيقونات السوشيال */
   footer{text-align:center;padding:30px 24px;background:#000;color:#666;border-top:1px solid #222;font-size:13px}
   footer a{color:var(--accent)}
   .social-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
@@ -95,12 +87,9 @@
 <header>
   <a class="logo" href="./"><img src="logo.jpg" alt="LUMI"></a>
   <div class="header-actions">
-    <!-- روابط السوشيال ميديا الأصلية (Font Awesome) -->
     <a class="icon-btn" href="https://www.instagram.com/lumi.me1" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
     <a class="icon-btn" href="https://www.facebook.com/share/1FS1JEFGwE/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
     <a class="icon-btn" href="https://www.tiktok.com/@lume.me1" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-    
-    <!-- الواتساب والسلة -->
     <a class="icon-btn" id="waBtn" href="#" target="_blank" title="تواصل واتساب"><i class="fa-brands fa-whatsapp"></i></a>
     <a class="icon-btn" href="cart.html" title="السلة"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadge">0</span></a>
   </div>
