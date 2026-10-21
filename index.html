@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>السلة | LUMI</title>
 <link rel="icon" href="logo.jpg">
-<!-- مكتبة الأيقونات الأصلية Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
@@ -50,8 +49,8 @@
   .summary h2{font-size:17px;margin-bottom:16px;color:var(--accent)}
   .form-row{margin-bottom:12px}
   .form-row label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#ccc}
-  .form-row input,.form-row textarea{width:100%;padding:10px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:var(--text);font-size:13px;font-family:inherit}
-  .form-row input:focus,.form-row textarea:focus{outline:none;border-color:var(--accent)}
+  .form-row input,.form-row select,.form-row textarea{width:100%;padding:10px;background:#0a0a0a;border:1px solid #333;border-radius:8px;color:var(--text);font-size:13px;font-family:inherit}
+  .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent)}
   .form-row textarea{resize:vertical;min-height:50px}
 
   .totals{border-top:1px solid #222;margin-top:14px;padding-top:14px}
@@ -77,13 +76,14 @@
 <body>
 
 <header>
-  <a class="logo" href="index.html"><img src="logo.jpg" alt="LUMI"></a>
+  <a class="logo" href="./"><img src="logo.jpg" alt="LUMI"></a>
   <div class="header-actions">
-    <a class="icon-btn" href="index.html" title="الرئيسية"><i class="fa-solid fa-house"></i></a>
+    <!-- زر الهوم بيرجع للصفحة الرئيسية -->
+    <a class="icon-btn" href="./" title="الرئيسية"><i class="fa-solid fa-house"></i></a>
   </div>
 </header>
 
-<div class="back"><a href="index.html">← متابعة التسوق</a></div>
+<div class="back"><a href="./">← متابعة التسوق</a></div>
 
 <div class="page-title">
   <h1>🛒 سلة المشتريات</h1>
@@ -94,10 +94,10 @@
 
 <script type="module">
 import { getCart, updateQty, removeFromCart, cartSubtotal, money, PLACEHOLDER_IMG, clearCart } from "./common.js";
-import { ADMIN_WHATSAPP, STORE_PHONE_DISPLAY } from "./firebase-config.js";
+import { ADMIN_WHATSAPP, STORE_PHONE_DISPLAY, GOVERNORATES } from "./firebase-config.js";
 
 const appEl = document.getElementById("app");
-let formState = { name: "", phone: "", address: "", notes: "" };
+let formState = { name: "", phone: "", gov: "", address: "", notes: "" };
 
 function render() {
   const cart = getCart();
@@ -109,13 +109,17 @@ function render() {
           <div style="font-size:64px;margin-bottom:12px">🛍️</div>
           <p style="font-size:16px;margin-bottom:6px">سلتك فارغة حاليًا</p>
           <p style="font-size:13px">تصفّح تشكيلتنا وأضف ما يعجبك</p>
-          <a href="index.html">← تسوق الآن</a>
+          <a href="./">← تسوق الآن</a>
         </div>
       </div>`;
     return;
   }
 
   const subtotal = cartSubtotal();
+
+  const govOptions = GOVERNORATES
+    .map(g => `<option value="${g}" ${formState.gov === g ? "selected" : ""}>${g}</option>`)
+    .join("");
 
   appEl.innerHTML = `
     <div>
@@ -145,15 +149,27 @@ function render() {
       <h2>📋 بيانات الشحن</h2>
       <div class="form-row"><label>الاسم بالكامل *</label><input type="text" id="fName" value="${formState.name}" placeholder="مثال: أحمد محمد"></div>
       <div class="form-row"><label>رقم الهاتف *</label><input type="tel" id="fPhone" value="${formState.phone}" placeholder="01xxxxxxxxx"></div>
-      <div class="form-row"><label>العنوان التفصيلي *</label><textarea id="fAddress" placeholder="المحافظة، الشارع، رقم المبنى، علامة مميزة...">${formState.address}</textarea></div>
+      
+      <div class="form-row">
+        <label>المحافظة *</label>
+        <select id="fGov">
+          <option value="">— اختر المحافظة —</option>
+          ${govOptions}
+        </select>
+      </div>
+
+      <div class="form-row"><label>العنوان التفصيلي *</label><textarea id="fAddress" placeholder="الشارع، رقم المبنى، علامة مميزة...">${formState.address}</textarea></div>
       <div class="form-row"><label>ملاحظات (اختياري)</label><textarea id="fNotes" placeholder="مقاس معين، لون، وقت توصيل مناسب...">${formState.notes}</textarea></div>
 
       <div class="totals">
-        <div class="totals-row total"><span>الإجمالي (بدون الشحن)</span><span>${money(subtotal)}</span></div>
+        <div class="totals-row total"><span>إجمالي المنتجات</span><span>${money(subtotal)}</span></div>
+        <div style="font-size:12px; color:var(--danger); margin-top:8px; text-align:center; font-weight:bold;">
+          * سعر الشحن يُحسب بشكل منفصل بناءً على المحافظة.
+        </div>
       </div>
 
       <button class="send-btn" id="sendBtn">📱 إرسال الطلب واتساب</button>
-      <p class="notice">بعد الإرسال سيتم تحويلك إلى واتساب مع تفاصيل طلبك جاهزة — سيتم الاتفاق على سعر الشحن مع مندوبنا على ${STORE_PHONE_DISPLAY}</p>
+      <p class="notice">سيتم الاتفاق على سعر الشحن مع مندوبنا على ${STORE_PHONE_DISPLAY}</p>
     </aside>
   `;
 
@@ -173,6 +189,7 @@ function render() {
   document.getElementById("fPhone").oninput   = e => formState.phone = e.target.value;
   document.getElementById("fAddress").oninput = e => formState.address = e.target.value;
   document.getElementById("fNotes").oninput   = e => formState.notes = e.target.value;
+  document.getElementById("fGov").onchange    = e => formState.gov = e.target.value;
 
   document.getElementById("sendBtn").onclick = sendOrder;
 }
@@ -184,7 +201,9 @@ function sendOrder() {
   const errors = [];
   if (!formState.name.trim())    errors.push("الاسم");
   if (!/^01\d{9}$/.test(formState.phone.trim().replace(/\s/g,""))) errors.push("رقم هاتف صحيح (11 رقم يبدأ بـ 01)");
+  if (!formState.gov)            errors.push("المحافظة");
   if (!formState.address.trim()) errors.push("العنوان");
+  
   if (errors.length) { alert("⚠️ من فضلك أدخل: " + errors.join("، ")); return; }
 
   const subtotal = cartSubtotal();
@@ -194,6 +213,7 @@ function sendOrder() {
     "",
     "👤 *الاسم:* " + formState.name.trim(),
     "📱 *الهاتف:* " + formState.phone.trim(),
+    "📍 *المحافظة:* " + formState.gov,
     "🏠 *العنوان:* " + formState.address.trim(),
     formState.notes.trim() ? "📝 *ملاحظات:* " + formState.notes.trim() : null,
     "",
@@ -201,7 +221,7 @@ function sendOrder() {
     ...cart.map(i => `• ${i.name} × ${i.qty} = ${i.price * i.qty} ج.م`),
     "",
     "💰 *إجمالي المنتجات:* " + subtotal + " ج.م",
-    "🚚 *(يُرجى إضافة سعر الشحن حسب المحافظة)*"
+    "🚚 *(باقي حساب سعر الشحن للمحافظة)*"
   ].filter(x => x !== null).join("\n");
 
   const url = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(lines)}`;
