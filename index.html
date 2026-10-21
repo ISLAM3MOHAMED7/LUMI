@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUMI | متجر الملابس العصرية</title>
-<link rel="icon" href="logo.jpg">
+<link rel="icon" href="Logo%20(2).jpg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
@@ -14,7 +14,7 @@
 
   /* الهيدر */
   header{background:#000;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
-  .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-right: auto;} /* حطينا margin-right عشان يزق الأيقونات للشمال */
+  .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-right: auto;} 
   
   .icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid #222;transition:.2s;color:#fff;font-size:18px}
   .icon-btn:hover{border-color:var(--accent);transform:translateY(-2px);color:var(--accent)}
@@ -28,22 +28,27 @@
   .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:none;align-items:center;justify-content:center}
   .cart-badge.show{display:inline-flex}
 
-  /* التصميم الرئيسي (الشكل اللي في الصورة) */
+  /* التصميم الرئيسي (اللوجو والنص) */
   .hero{text-align:center;padding:50px 20px 40px;background:linear-gradient(180deg,#000 0%,#0a0a0a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center}
   
-  /* اللوجو الكبير في النص */
-  .hero-logo{width:140px;height:auto;margin-bottom:15px; filter: drop-shadow(0px 0px 20px rgba(255,255,255,0.15)); border-radius: 8px;}
+  /* الشعار (الأجنحة) */
+  .hero-logo {
+    width: 130px; /* حجم مناسب للأجنحة */
+    height: auto;
+    margin-bottom: 15px; 
+    filter: drop-shadow(0px 0px 20px rgba(255,255,255,0.15)); 
+  }
   
-  /* كلمة LUMI بالتدرج المعدني */
-  .hero h1{font-size:48px;font-weight:800;letter-spacing:10px;margin-bottom:8px; padding-right: 10px; /* لتعويض الـ letter-spacing */
+  /* كلمة LUMI ⚡ بالتدرج المعدني */
+  .hero h1{font-size:52px;font-weight:800;letter-spacing:10px;margin-bottom:12px; padding-right: 10px; 
     background: linear-gradient(to bottom, #ffffff 0%, #b0b0b0 50%, #555555 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 4px 10px rgba(0,0,0,0.5);
   }
   
-  /* الشعار بالتدرج المعدني */
-  .hero p.slogan {font-size:18px;font-weight:500;letter-spacing:1.5px; margin-top: 5px;
+  /* الشعار (الكلام اللي تحته) */
+  .hero .slogan-line {font-size:18px;font-weight:500;letter-spacing:1px; margin-bottom: 4px;
     background: linear-gradient(to bottom, #d0d0d0 0%, #888888 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -95,8 +100,8 @@
   @media(max-width:600px){
     .hero{padding:30px 20px 20px;}
     .hero-logo{width:110px;}
-    .hero h1{font-size:38px;letter-spacing:8px;}
-    .hero p.slogan{font-size:14px;letter-spacing:1px;}
+    .hero h1{font-size:40px;letter-spacing:6px;}
+    .hero .slogan-line{font-size:15px;}
     .icon-btn{width:35px;height:35px;font-size:16px}
     .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 14px 40px}
     .card-img{height:200px}.filters,.cats{padding:0 14px}
@@ -106,7 +111,6 @@
 <body>
 
 <header>
-  <!-- مساحة فارغة على اليمين، والأيقونات على الشمال زي الصورة -->
   <div style="width: 40px;"></div> 
   <div class="header-actions">
     <a class="icon-btn" href="https://www.instagram.com/lumi.me1" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -117,11 +121,17 @@
   </div>
 </header>
 
-<!-- الجزء العلوي (اللوجو والنص) -->
+<!-- هنا اللوجو والنص -->
 <section class="hero">
-  <img src="logo.jpg" alt="LUMI Logo" class="hero-logo">
-  <h1>LUMI</h1>
-  <p class="slogan">Wear Your Light, Be The Shine</p>
+  <!-- الشعار (الأجنحة) -->
+  <img src="Logo%20(2).jpg" alt="LUMI Logo" class="hero-logo">
+  
+  <!-- كلمة LUMI -->
+  <h1>LUMI ⚡</h1>
+  
+  <!-- الشعار -->
+  <p class="slogan-line">_wear your Light.</p>
+  <p class="slogan-line">_ Be the shine.</p>
 </section>
 
 <div class="filters">
