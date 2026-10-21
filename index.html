@@ -6,6 +6,8 @@
 <title>LUMI | متجر الملابس العصرية</title>
 <link rel="icon" href="logo.jpg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- خط عريض لكلمة LUMI -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
   :root{--bg:#0a0a0a;--card:#141414;--text:#f5f5f5;--muted:#999;--accent:#b0b0b0;--danger:#e63946}
@@ -15,13 +17,16 @@
   /* الهيدر */
   header{background:#000;padding:10px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
   
-  /* صورة LUMI في الهيدر (على اليمين) */
-  .header-logo img {
-    height: 35px; 
-    width: auto;
-    object-fit: contain;
-    mix-blend-mode: lighten; /* أفضل من screen للخلفيات الرمادية */
-    filter: contrast(1.2); 
+  /* كلمة LUMI في الهيدر كنص معدني (على اليمين) */
+  .header-logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    background: linear-gradient(to bottom, #ffffff 0%, #b3b3b3 45%, #555555 50%, #888888 55%, #e6e6e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
   }
 
   .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-right: auto;} 
@@ -46,17 +51,26 @@
     width: 130px; 
     height: auto;
     margin-bottom: 10px; 
-    mix-blend-mode: lighten; /* دمج الخلفية الرمادية */
-    filter: contrast(1.2) drop-shadow(0px 0px 20px rgba(255,255,255,0.1)); 
+    mix-blend-mode: screen; /* لدمج الخلفية */
+    filter: contrast(1.5) brightness(1.2); /* تعديل الإضاءة عشان المربع يختفي */
   }
 
-  /* صورة كلمة LUMI الكبيرة في النص */
-  .logo-text {
-    width: 250px; 
-    height: auto;
+  /* كلمة LUMI المكتوبة في النص بالتدرج المعدني */
+  .lumi-main-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 65px;
+    font-weight: 800;
+    letter-spacing: 15px;
+    padding-right: 15px; 
     margin-bottom: 10px;
-    mix-blend-mode: lighten; 
-    filter: contrast(1.2) drop-shadow(0px 4px 5px rgba(0,0,0,0.8));
+    
+    /* التدرج المعدني الفضي */
+    background: linear-gradient(to bottom, #ffffff 0%, #b3b3b3 40%, #555555 50%, #888888 60%, #e6e6e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* ظل لإبراز النص */
+    filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.9));
   }
   
   /* الشعار السفلي */
@@ -113,9 +127,9 @@
 
   @media(max-width:600px){
     .hero{padding:30px 20px 20px;}
-    .logo-wing{width:100px;}
-    .logo-text{width:200px;}
-    .header-logo img{height: 28px;}
+    .logo-wing{width:110px;}
+    .lumi-main-text{font-size:45px; letter-spacing: 10px; padding-right: 10px;}
+    .header-logo-text{font-size: 20px;}
     .hero-tagline{font-size:14px;}
     .icon-btn{width:35px;height:35px;font-size:16px}
     .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 14px 40px}
@@ -126,10 +140,8 @@
 <body>
 
 <header>
-  <!-- صورة LUMI في الهيدر على اليمين -->
-  <a class="header-logo" href="./">
-    <img src="lumi-text.jpg" alt="LUMI">
-  </a>
+  <!-- كلمة LUMI في الهيدر كنص (على اليمين) -->
+  <a href="./" class="header-logo-text">LUMI</a>
 
   <div class="header-actions">
     <a class="icon-btn" href="https://www.instagram.com/lumi.me1" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -143,11 +155,11 @@
 <!-- الجزء الخاص بالصور والشعار في نص الصفحة -->
 <section class="hero">
   
-  <!-- صورة الأجنحة -->
+  <!-- صورة الأجنحة (لازم تكون مرفوعة باسم logo.jpg) -->
   <img src="logo.jpg" alt="LUMI Wings" class="logo-wing">
   
-  <!-- صورة كلمة LUMI الكبيرة -->
-  <img src="lumi-text.jpg" alt="LUMI Text" class="logo-text">
+  <!-- كلمة LUMI مكتوبة كنص بالتدرج المعدني (مش صورة عشان متتكسرش) -->
+  <div class="lumi-main-text">LUMI</div>
   
   <!-- الشعار السفلي -->
   <p class="hero-tagline">Wear Your Light, Be The Shine</p>
