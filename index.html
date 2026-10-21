@@ -17,11 +17,11 @@
   
   /* صورة LUMI في الهيدر (على اليمين) */
   .header-logo img {
-    height: 35px; /* حجم مناسب للهيدر */
+    height: 35px; 
     width: auto;
     object-fit: contain;
-    mix-blend-mode: screen; /* إزالة الخلفية الداكنة للصورة */
-    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); 
+    mix-blend-mode: lighten; /* أفضل من screen للخلفيات الرمادية */
+    filter: contrast(1.2); 
   }
 
   .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-right: auto;} 
@@ -46,17 +46,17 @@
     width: 130px; 
     height: auto;
     margin-bottom: 10px; 
-    mix-blend-mode: screen; /* دمج الخلفية السوداء مع خلفية الموقع */
-    filter: drop-shadow(0px 0px 20px rgba(255,255,255,0.1)); 
+    mix-blend-mode: lighten; /* دمج الخلفية الرمادية */
+    filter: contrast(1.2) drop-shadow(0px 0px 20px rgba(255,255,255,0.1)); 
   }
 
   /* صورة كلمة LUMI الكبيرة في النص */
-  .lumi-main-img {
-    width: 250px; /* عرض مناسب */
+  .logo-text {
+    width: 250px; 
     height: auto;
     margin-bottom: 10px;
-    mix-blend-mode: screen; /* دمج الخلفية */
-    filter: drop-shadow(0px 4px 5px rgba(0,0,0,0.8));
+    mix-blend-mode: lighten; 
+    filter: contrast(1.2) drop-shadow(0px 4px 5px rgba(0,0,0,0.8));
   }
   
   /* الشعار السفلي */
@@ -114,7 +114,7 @@
   @media(max-width:600px){
     .hero{padding:30px 20px 20px;}
     .logo-wing{width:100px;}
-    .lumi-main-img{width:200px;}
+    .logo-text{width:200px;}
     .header-logo img{height: 28px;}
     .hero-tagline{font-size:14px;}
     .icon-btn{width:35px;height:35px;font-size:16px}
@@ -147,7 +147,7 @@
   <img src="logo.jpg" alt="LUMI Wings" class="logo-wing">
   
   <!-- صورة كلمة LUMI الكبيرة -->
-  <img src="lumi-text.jpg" alt="LUMI Text" class="lumi-main-img">
+  <img src="lumi-text.jpg" alt="LUMI Text" class="logo-text">
   
   <!-- الشعار السفلي -->
   <p class="hero-tagline">Wear Your Light, Be The Shine</p>
